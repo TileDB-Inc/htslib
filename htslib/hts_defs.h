@@ -107,7 +107,11 @@ DEALINGS IN THE SOFTWARE.  */
 #if defined(HTS_BUILDING_LIBRARY)
 #define HTSLIB_EXPORT __declspec(dllexport)
 #else
+#ifdef _MSC_VER
+#define HTSLIB_EXPORT __declspec(dllimport)
+#else
 #define HTSLIB_EXPORT
+#endif
 #endif
 #elif HTS_COMPILER_HAS(__visibility__) || HTS_GCC_AT_LEAST(4,0)
 #define HTSLIB_EXPORT __attribute__((__visibility__("default")))

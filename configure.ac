@@ -155,6 +155,50 @@ static_LDFLAGS=$LDFLAGS
 static_LIBS='-lpthread -lz -lm'
 private_LIBS=$LDFLAGS
 
+# request to generate msys2 dll static libs for anything not provided by windows installation.
+#AC_ARG_ENABLE([msys2-staticalized-dll-hacks],
+AC_ARG_ENABLE([msys2_staticalized_dll_hacks],
+  [AS_HELP_STRING([--enable-msys2_staticalized_dll_hacks],
+                  [enable support for msys2 staticalized dll files])],
+  [], [enable_staticalized_msys2_dll_hacks=no])
+if test "$enable_staticalized_msys2_dll_hacks" != no; then
+  echo "Adding support for staticalized msys2 dll"
+fi
+
+# moved -way- down in script to see if effect changes, appears LIBS/static_LIBS being wiped somewhere after this...
+#~ if test "$enable_staticalized_msys2_dll_hacks" != xno; then
+#~ #  LIBS='$(MSYSTEM_PREFIX)/lib/libregex.a \
+
+  #~ static_LIBS='$(MSYSTEM_PREFIX)/lib/libregex.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libsystre.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libtre.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libintl.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libiconv.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libdeflate.a \
+            #~ $(MSYSTEM_PREFIX)/lib/liblzma.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libbz2.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libcrypt32.a \
+            #~ $(MSYSTEM_PREFIX)/lib/libwinpthread.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libssl.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libwldap32.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libcrypto.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libcrypt32.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libcertcli.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libzstd.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libbrotlidec.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libbrotlienc.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libbrotlicommon.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libssh2.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libidn2.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libpsl.a \
+     #~ -lws2_32 \
+     #~ $(MSYSTEM_PREFIX)/lib/libunistring.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libnghttp2.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libbcrypt.a \
+     #~ $(MSYSTEM_PREFIX)/lib/libz.a'
+  #~ CFLAGS="$CFLAGS -DCURL_STATICLIB"
+#~ fi
+
 AC_ARG_ENABLE([bz2],
   [AS_HELP_STRING([--disable-bz2],
                   [omit support for BZ2-compressed CRAM files])],
@@ -548,6 +592,40 @@ fi
 
 dnl Apply value from HTS_PROG_CC_WERROR (if set)
 AS_IF([test "x$hts_late_cflags" != x],[CFLAGS="$CFLAGS $hts_late_cflags"])
+
+if test "$enable_staticalized_msys2_dll_hacks" != no; then
+#  static_LIBS='$(MSYSTEM_PREFIX)/lib/libregex.a \
+
+  LIBS='$(MSYSTEM_PREFIX)/lib/libregex.a \
+              \
+            $(MSYSTEM_PREFIX)/lib/libsystre.a \
+            $(MSYSTEM_PREFIX)/lib/libtre.a \
+            $(MSYSTEM_PREFIX)/lib/libintl.a \
+            $(MSYSTEM_PREFIX)/lib/libiconv.a \
+            $(MSYSTEM_PREFIX)/lib/libdeflate.a \
+            $(MSYSTEM_PREFIX)/lib/liblzma.a \
+            $(MSYSTEM_PREFIX)/lib/libbz2.a \
+            $(MSYSTEM_PREFIX)/lib/libcrypt32.a \
+            $(MSYSTEM_PREFIX)/lib/libwinpthread.a \
+     $(MSYSTEM_PREFIX)/lib/libssl.a \
+     $(MSYSTEM_PREFIX)/lib/libwldap32.a \
+     $(MSYSTEM_PREFIX)/lib/libcrypto.a \
+     $(MSYSTEM_PREFIX)/lib/libcrypt32.a \
+     $(MSYSTEM_PREFIX)/lib/libcertcli.a \
+     $(MSYSTEM_PREFIX)/lib/libzstd.a \
+     $(MSYSTEM_PREFIX)/lib/libbrotlidec.a \
+     $(MSYSTEM_PREFIX)/lib/libbrotlienc.a \
+     $(MSYSTEM_PREFIX)/lib/libbrotlicommon.a \
+     $(MSYSTEM_PREFIX)/lib/libssh2.a \
+     $(MSYSTEM_PREFIX)/lib/libidn2.a \
+     $(MSYSTEM_PREFIX)/lib/libpsl.a \
+     -lws2_32 \
+     $(MSYSTEM_PREFIX)/lib/libunistring.a \
+     $(MSYSTEM_PREFIX)/lib/libnghttp2.a \
+     $(MSYSTEM_PREFIX)/lib/libbcrypt.a \
+     $(MSYSTEM_PREFIX)/lib/libz.a'
+  CFLAGS="$CFLAGS -DCURL_STATICLIB"
+fi
 
 AC_SUBST([s3])
 AC_SUBST([CRYPTO_LIBS])
